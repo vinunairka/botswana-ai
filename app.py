@@ -1,9 +1,7 @@
 from llama_index import SimpleDirectoryReader, GPTListIndex, readers, GPTSimpleVectorIndex, LLMPredictor, PromptHelper, ServiceContext
 from langchain import OpenAI
-import gradio as gr
-import sys
+from flask import Flask, render_template, request
 import os
-import time
 
 def construct_index(directory_path):
     # set maximum input size
@@ -15,7 +13,8 @@ def construct_index(directory_path):
     # set chunk size limit
     chunk_size_limit = 600 
 
-    os.environ["OPENAI_API_KEY"] = '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'
+    # Change it before push to github
+    os.environ["OPENAI_API_KEY"] = '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'
 
     # define prompt helper
     prompt_helper = PromptHelper(max_input_size, num_outputs, max_chunk_overlap, chunk_size_limit=chunk_size_limit)
@@ -32,34 +31,21 @@ def construct_index(directory_path):
 
     return index
 
-# def chatbot(input_text):
-#     index = GPTSimpleVectorIndex.load_from_disk('index.json')
-#     response = index.query(input_text, response_mode="compact")
-#     return response.response
+app = Flask(__name__)
+app.static_folder = 'static'
 
-# iface = gr.Interface(fn=chatbot,
-#                      inputs=gr.components.Textbox(lines=7, label="Enter your text"),
-#                      outputs="text",
-#                      title="Custom-trained AI Chatbot")
+@app.route("/")
+def home():
+    return render_template("index.html")
 
-# index = construct_index("docs")
-# iface.launch(share=True)
-
-with gr.Blocks(title="Botswana.AI") as chatai:    
-    gr.Label(label="",value="Botswana.AI")
-    chatbot = gr.Chatbot(label="Messages")
-    chat_message = gr.Textbox(label="Enter your text")
-    clear = gr.Button("Clear")
-
-    def respond(input_text, chat_history):
+@app.route("/get")
+def respond():
         index = GPTSimpleVectorIndex.load_from_disk('index.json')
+        input_text = request.args.get('msg')
         bot_message = index.query(input_text, response_mode="compact")
-        chat_history.append((input_text, bot_message.response))
-        time.sleep(1)
-        return "", chat_history
-
-    chat_message.submit(respond, [chat_message, chatbot], [chat_message, chatbot])
-    clear.click(lambda: None, None, chatbot, queue=False)
+        return bot_message.response
 
 index = construct_index("docs")
-chatai.launch(share=True)
+
+if __name__ == "__main__":
+    app.run()
