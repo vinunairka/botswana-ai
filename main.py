@@ -43,14 +43,12 @@ def home():
 def respond():
         index = GPTSimpleVectorIndex.load_from_disk('index.json')
         input_text = request.args.get('msg')
-        print(input_text)
         sleep(1)
         bot_message = index.query(input_text, response_mode="compact")
-        print(bot_message)
         return bot_message.response
 
 index = construct_index("docs")
 
 if __name__ == "__main__":
-    app.debug = True
+    app.debug = False
     app.run()
