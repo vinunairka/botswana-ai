@@ -15,7 +15,7 @@ def construct_index(directory_path):
     chunk_size_limit = 600 
 
     # Change it before push to github
-    os.environ["OPENAI_API_KEY"] = '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'
+    os.environ["OPENAI_API_KEY"] = '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'
 
     # define prompt helper
     prompt_helper = PromptHelper(max_input_size, num_outputs, max_chunk_overlap, chunk_size_limit=chunk_size_limit)
