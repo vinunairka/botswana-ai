@@ -78,7 +78,6 @@
     const msgerForm = get(".msger-inputarea");
     const msgerInput = get(".msger-input");
     const msgerChat = get(".msger-chat");
-      const waitHTML = get(".typing-indicator");
 
     // Icons made by Freepik from www.flaticon.com
     const BOT_IMG = "/static/assets/ic_botswana.svg";
@@ -128,7 +127,7 @@
 
       // Bot Response
         document.getElementById("myIndicator").style.display = "table";
-        waitHTML.scrollTop += 500;
+        msgerChat.scrollTop += 500;
       $.get("/get", { msg: rawText }).done(function (data) {
         console.log(rawText);
         console.log(data);
