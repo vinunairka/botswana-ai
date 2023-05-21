@@ -12,12 +12,37 @@
 </head>
 
 <body>
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <h2 class="welcome">Welcome To</h2>
+        <img
+          class="icon"
+          src="/static/assets/ic_icon.svg"
+          alt=""
+          onclick="closeModal()"
+        />
+        <h2 class="bots-heading">Botswana.AI</h2>
+        <div class="context">
+          <p class="para">AI Powered</p>
+          <p class="para">Citizen Assistant for Botswana</p>
+        </div>
+        <img
+          class="botswana-img"
+          src="/static/assets/ic_botswana.svg"
+          onclick="closeModal()"
+        />
+      </div>
+    </div>
   <!-- partial:index.partial.html -->
   <section class="msger">
     <header class="msger-header">
       <div class="msger-header-title">
-        <div class="heading"><img class="heading-img" src="/static/assets/ic_botswana.svg"><h2>Botswana.AI</h2></div>
-      </div>
+          <div class="heading">
+            <h2>Botswana.AI</h2>
+          </div>
+        </div>
     </header>
 
     <main class="msger-chat">
@@ -30,11 +55,15 @@
           </div>
 
           <div class="msg-text">
-            Hi, welcome to Botswana.AI! How can I help you? 🤩
+            Welcome to Botswana.AI, your single point of contact to the Government of Botswana. How may I assist you today? 🤩
           </div>
         </div>
       </div>
-
+        <div class="typing-indicator" id="myIndicator" style="display: none">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
     </main>
 
     <form class="msger-inputarea">
@@ -49,6 +78,7 @@
     const msgerForm = get(".msger-inputarea");
     const msgerInput = get(".msger-input");
     const msgerChat = get(".msger-chat");
+      const waitHTML = get(".typing-indicator");
 
     // Icons made by Freepik from www.flaticon.com
     const BOT_IMG = "/static/assets/ic_botswana.svg";
@@ -89,7 +119,7 @@
         </div>
       </div>
       `;
-
+        document.getElementById("myIndicator").style.display = "none";
       msgerChat.insertAdjacentHTML("beforeend", msgHTML);
       msgerChat.scrollTop += 500;
     }
@@ -97,6 +127,8 @@
     function botResponse(rawText) {
 
       // Bot Response
+        document.getElementById("myIndicator").style.display = "table";
+        waitHTML.scrollTop += 500;
       $.get("/get", { msg: rawText }).done(function (data) {
         console.log(rawText);
         console.log(data);
@@ -118,8 +150,10 @@
       return `${h.slice(-2)}:${m.slice(-2)}`;
     }
 
-
-
+      // Function to close the modal
+      function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+      }
   </script>
 
 </body>
